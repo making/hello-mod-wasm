@@ -22,6 +22,20 @@ tanzu apps workload apply hello-mod-wasm \
   -y
 ```
 
+or
+
+```
+GIT_REPO=ghcr.io/making
+tanzu apps workload apply hello-mod-wasm \
+  --local-path ./ \
+  --source-image ${GIT_REPO}/hello-mos-wasm-source \
+  --type web \
+  --app hello-mod-wasm \
+  --param dockerfile=Dockerfile \
+  -n demo \
+  -y
+```
+
 
 ```
 $ curl -k $(kubectl get ksvc -n demo hello-mod-wasm -ojsonpath='{.status.url}')/hello-wasm 

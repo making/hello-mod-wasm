@@ -1,7 +1,8 @@
 FROM ghcr.io/vmware-labs/httpd-mod-wasm:latest as modules
 
-FROM rust:1.65 as builder
+FROM rust:1.65-alpine as builder
 WORKDIR /workspace
+RUN apk add --update make
 RUN rustup target add wasm32-wasi
 COPY ./wasm_src /workspace/wasm_src
 RUN make -C /workspace/wasm_src

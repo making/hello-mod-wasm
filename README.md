@@ -1,15 +1,42 @@
 # Hello mod_wasm
 
-Check wasm modules
+
+## (Optinal) Build and Run wasm modules locally
 
 ```
-$ wasmtime wasm_modules/hello_wasm.wasm
-
-Hello, Wasm! @stdout
-Hello, Wasm! @stderr
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup target add wasm32-wasi
 ```
 
-Deploy to Tanzu Application Platform
+```
+make -C wasm_src
+```
+
+```
+brew install wasmtime
+wasmtime wasm_modules/hello.wasm
+```
+
+```
+Hello, world!
+```
+
+## Build and Run with docker
+
+```
+docker build . -t hello-mod-wasm 
+```
+
+```
+docker run --rm -e PORT=8080 -p 8080:8080 hello-mod-wasm
+```
+
+```
+$ curl localhost:8080/hello
+Hello, world!
+```
+
+## Build and Run with Tanzu Application Platform
 
 ```
 tanzu apps workload apply hello-mod-wasm \
@@ -39,15 +66,6 @@ tanzu apps workload apply hello-mod-wasm \
 
 
 ```
-$ curl -k $(kubectl get ksvc -n demo hello-mod-wasm -ojsonpath='{.status.url}')/hello-wasm 
-Hello, Wasm! @stdout
-```
-
-```
-$ kubectl logs -l app.kubernetes.io/part-of=hello-mod-wasm,app.kubernetes.io/component=run -c workload -n demo
-
-[Wed Dec 14 21:52:30.281526 2022] [mpm_event:notice] [pid 1:tid 140697608187200] AH00489: Apache/2.4.54 (Unix) configured -- resuming normal operations
-[Wed Dec 14 21:52:30.281753 2022] [core:notice] [pid 1:tid 140697608187200] AH00094: Command line: 'httpd -D FOREGROUND'
-Hello, Wasm! @stderr
-127.0.0.1 - - [14/Dec/2022:21:52:31 +0000] "GET /hello-wasm HTTP/1.1" 200 21
+$ curl -k $(kubectl get ksvc -n demo hello-mod-wasm -ojsonpath='{.status.url}')/hello
+Hello, world!
 ```

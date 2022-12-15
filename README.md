@@ -52,10 +52,9 @@ tanzu apps workload apply hello-mod-wasm \
 or
 
 ```
-git clone https://github.com/making/hello-mod-wasm
 GIT_REPO=ghcr.io/making
 tanzu apps workload apply hello-mod-wasm \
-  --local-path ./hello-mod-wasm \
+  --local-path ./ \
   --source-image ${GIT_REPO}/hello-mod-wasm-source \
   --type web \
   --app hello-mod-wasm \
